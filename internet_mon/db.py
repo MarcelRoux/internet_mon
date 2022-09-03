@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 
 def connect_db(db_name_base='data/log.db'):
@@ -20,7 +21,31 @@ def create_table(conn, cursor, script_loc='sql/create.sql'):
     return table
 
 
-conn, cursor = connect_db()
-table = create_table(conn, cursor)
+def insert(table_name: str, data: dict, conn, cur):
+    cols = f'{", ".join(data.keys())}'
+    named_parameters = f'{", ".join([f":{k}" for k in data.keys()])}'
 
-conn.close()
+    query = f"INSERT INTO {table_name} ({cols}) VALUES ({named_parameters});"
+    print('SQL insert:')
+    print(query)
+    cur.execute(query, data)
+    conn.commit()
+
+
+def insert_data(db_name_base, data):
+    conn, cursor = connect_db(db_name_base)
+    table = create_table(conn, cursor)
+    insert(table, data, conn, cursor)
+
+    conn.close()
+
+
+def main():
+    with open('data/sample_data.json', 'r') as data_file:
+        DATA = json.loads(data_file.read())
+
+    insert_data('data/log.db', DATA)
+
+
+if __name__ == '__main__':
+    main()
