@@ -1,15 +1,33 @@
-import speedtest
+import speedtest as ookla_speedtest
 
 
 servers = []
 threads = None
 
-s = speedtest.Speedtest()
-s.get_servers(servers)
-s.get_best_server()
-s.download(threads=threads)
-s.upload(threads=threads)
 
-results_dict = s.results.dict()
+def speedtest(status_updates=False):
 
-print(results_dict)
+    if (status_updates):
+        print('Configuring test.')
+
+    s = ookla_speedtest.Speedtest()
+
+    if (status_updates):
+        print('Testing for best server.')
+    s.get_servers(servers)
+    s.get_best_server()
+
+    if (status_updates):
+        print('Download test.')
+    s.download(threads=threads)
+
+    if (status_updates):
+        print('Upload test.')
+    s.upload(threads=threads)
+
+    if (status_updates):
+        print('Done.')
+    results_dict = s.results.dict()
+
+    # print(results_dict)
+    return results_dict
