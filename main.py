@@ -1,25 +1,18 @@
 from internet_mon.speedtest_interface import speedtest
 from internet_mon.utils import flatten_json
 from internet_mon.db import insert_data
-
-
-DB_NAME_BASE = 'data/log.db'
+from internet_mon.config import DB_NAME, SQL_CREATE_SCRIPT, SPEEDTEST_UPDATES
 
 
 def main():
-    print('Running speedtest.')
-    r = speedtest(status_updates=True)
-    print(r)
+    r = speedtest(status_updates=SPEEDTEST_UPDATES)
 
-    r_flat = flatten_json(r)
-    # print(f'r_flat: {r_flat}')
-    # print(sorted(r_flat))
-    # [print(f'{e}: {r_flat[e]}') for e in sorted(r_flat)]
+    data = flatten_json(r)
 
-    print('Logging data.')
-    insert_data(DB_NAME_BASE, r_flat)
-
-    print('Done.')
+    if (data):
+        insert_data(DB_NAME, SQL_CREATE_SCRIPT, data)
+    else:
+        print('No data to log.')
 
 
 if __name__ == '__main__':
