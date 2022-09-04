@@ -9,8 +9,8 @@ def connect_db(db_name):
     return conn, cursor
 
 
-def create_table(conn, cursor, script_loc):
-    with open(script_loc, 'r') as sql_file:
+def create_table(conn, cursor, sql_create_script_loc):
+    with open(sql_create_script_loc, 'r') as sql_file:
         sql_script = sql_file.read()
 
     cursor.executescript(sql_script)
@@ -32,9 +32,9 @@ def insert(table_name: str, data: dict, conn, cur):
     conn.commit()
 
 
-def insert_data(db_name, data):
+def insert_data(db_name, sql_create_script_loc, data):
     conn, cursor = connect_db(db_name)
-    table = create_table(conn, cursor)
+    table = create_table(conn, cursor, sql_create_script_loc)
     insert(table, data, conn, cursor)
 
     conn.close()
