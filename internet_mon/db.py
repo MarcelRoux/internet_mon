@@ -2,14 +2,14 @@ import sqlite3
 import json
 
 
-def connect_db(db_name_base='data/log.db'):
-    conn = sqlite3.connect(db_name_base)
+def connect_db(db_name):
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     return conn, cursor
 
 
-def create_table(conn, cursor, script_loc='sql/create.sql'):
+def create_table(conn, cursor, script_loc):
     with open(script_loc, 'r') as sql_file:
         sql_script = sql_file.read()
 
@@ -26,14 +26,14 @@ def insert(table_name: str, data: dict, conn, cur):
     named_parameters = f'{", ".join([f":{k}" for k in data.keys()])}'
 
     query = f"INSERT INTO {table_name} ({cols}) VALUES ({named_parameters});"
-    print('SQL insert:')
-    print(query)
+    # print('SQL insert:')
+    # print(query)
     cur.execute(query, data)
     conn.commit()
 
 
-def insert_data(db_name_base, data):
-    conn, cursor = connect_db(db_name_base)
+def insert_data(db_name, data):
+    conn, cursor = connect_db(db_name)
     table = create_table(conn, cursor)
     insert(table, data, conn, cursor)
 
