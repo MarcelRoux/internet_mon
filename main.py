@@ -1,18 +1,31 @@
 from internet_mon.speedtest_interface import speedtest
 from internet_mon.utils import flatten_json
 from internet_mon.db import insert_data
-from internet_mon.config import DB_NAME, SQL_CREATE_SCRIPT, SPEEDTEST_UPDATES
+from internet_mon.config import (DB_NAME,
+                                 SQL_CREATE_SCRIPT,
+                                 SPEEDTEST_UPDATES,
+                                 SPEEDTEST_RETRIES,
+                                 SPEEDTEST_RETRY_UPDATES)
+from datetime import datetime, timezone
 
 
 def main():
-    r = speedtest(status_updates=SPEEDTEST_UPDATES)
 
-    data = flatten_json(r)
+    print(f'{datetime.now(timezone.utc).isoformat()}')
+
+    data = speedtest(status_updates=SPEEDTEST_UPDATES,
+                     retries=SPEEDTEST_RETRIES,
+                     retry_updates=SPEEDTEST_RETRY_UPDATES)
+
+    data = flatten_json(data)
+    print(f'data.ping: {data.get("ping")}')
 
     if (data):
         insert_data(DB_NAME, SQL_CREATE_SCRIPT, data)
     else:
         print('No data to log.')
+
+    print('=' * 32)
 
 
 if __name__ == '__main__':
