@@ -14,9 +14,6 @@ def speedtest(status_updates=False, retries=3, retry_updates=False):
             if (retry_updates):
                 print(f'Attempt {attempt}...', end=' ')
 
-            if (attempt < 3):
-                raise ValueError('Sample error for testing.')
-
             if (status_updates):
                 print('Configuring test.')
 
