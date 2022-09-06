@@ -5,12 +5,18 @@ servers = []
 threads = None
 
 
-def speedtest(status_updates=False, retries=3):
+def speedtest(status_updates=False, retries=3, retry_updates=False):
 
     results_dict = None
 
-    for attempt in range(retries):
+    for attempt in range(1, retries + 1):
         try:
+            if (retry_updates):
+                print(f'Attempt {attempt}...', end=' ')
+
+            if (attempt < 3):
+                raise ValueError('Sample error for testing.')
+
             if (status_updates):
                 print('Configuring test.')
 
@@ -35,9 +41,13 @@ def speedtest(status_updates=False, retries=3):
 
         except:
             # perhaps reconnect, etc.
+            if (retry_updates):
+                print('failed.')
             continue
 
         else:
+            if (retry_updates):
+                print('successful.')
             break
 
     return results_dict
