@@ -5,7 +5,10 @@ def flatten_json(d):
         '''
         Recursive function to flatten dictionaries and lists.
         '''
-        if (isinstance(d, dict)):
+        if (d is None):
+            pass
+
+        elif (isinstance(d, dict)):
             for k in d:
                 flatten(d.get(k), name + k + '_')
 
