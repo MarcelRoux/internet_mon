@@ -18,7 +18,7 @@ def speedtest(status_updates=False, retries=3, retry_updates=False):
             if (status_updates):
                 print('Configuring test.')
 
-            s = ookla_speedtest.Speedtest()
+            s = ookla_speedtest.Speedtest(secure=True)
 
             if (status_updates):
                 print('Testing for best server.')
