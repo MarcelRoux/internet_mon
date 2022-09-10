@@ -8,11 +8,12 @@ from internet_mon.config import (DB_NAME,
                                  SPEEDTEST_RETRY_UPDATES,
                                  SQL_CREATE_PING_SCRIPT)
 from datetime import datetime, timezone
+from internet_mon.ping import ping
 
 
 def main():
 
-    print(f'{datetime.now(timezone.utc).isoformat()}')
+    print('SPEEDTEST')
 
     data = speedtest(status_updates=SPEEDTEST_UPDATES,
                      retries=SPEEDTEST_RETRIES,
@@ -26,8 +27,21 @@ def main():
     else:
         print('No data to log.')
 
+    print('-' * 32)
+
+    print('PING')
+
+    data = ping('google.com')
+    if (data):
+        insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
+    else:
+        print('No data to log.')
+
     print('=' * 32)
 
 
 if __name__ == '__main__':
+
+    print(f'{datetime.now(timezone.utc).isoformat()}')
+
     main()
