@@ -22,3 +22,10 @@ SPEEDTEST_UPDATES=Boolean
 SPEEDTEST_RETRIES=Int
 SPEEDTEST_RETRY_UPDATES=Boolean
 ```
+
+## Errors
+
+HTTP 403 Error - [use secure flag](https://ubuntu-mate.community/t/speedtest-cli-error/25722/4).
+
+This error would show up on the hour and on the half hour, even when using a cron offset of up to 5 minutes.  
+This is resolved as indicated in the above resource by specifying the secure option during setup.

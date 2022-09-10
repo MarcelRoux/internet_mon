@@ -1,4 +1,5 @@
 import speedtest as ookla_speedtest
+from speedtest import ConfigRetrievalError
 
 
 servers = []
@@ -17,7 +18,7 @@ def speedtest(status_updates=False, retries=3, retry_updates=False):
             if (status_updates):
                 print('Configuring test.')
 
-            s = ookla_speedtest.Speedtest()
+            s = ookla_speedtest.Speedtest(secure=True)
 
             if (status_updates):
                 print('Testing for best server.')
@@ -36,10 +37,18 @@ def speedtest(status_updates=False, retries=3, retry_updates=False):
                 print('Done.')
             results_dict = s.results.dict()
 
-        except:
+        except ConfigRetrievalError as e:
             # perhaps reconnect, etc.
             if (retry_updates):
                 print('failed.')
+            print(f'ConfigRetrievalError: {e}')
+            continue
+
+        except Exception as e:
+            # perhaps reconnect, etc.
+            if (retry_updates):
+                print('failed.')
+            print(f'Generic exception: {e}')
             continue
 
         else:
