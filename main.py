@@ -32,6 +32,8 @@ def main():
     print('PING')
 
     data = ping('google.com')
+    print(f'ping: {data}')
+
     if (data):
         insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
     else:
