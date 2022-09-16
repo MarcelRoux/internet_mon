@@ -14,5 +14,6 @@ SPEEDTEST_RETRIES = int(os.getenv('SPEEDTEST_RETRIES', '3'))
 SPEEDTEST_RETRY_UPDATES = os.getenv('SPEEDTEST_RETRY_UPDATES').lower() == 'true'
 
 # Load ping config.
-
 SQL_CREATE_PING_SCRIPT = os.getenv('SQL_CREATE_PING_SCRIPT')
+PING_HOSTS_FILE = os.getenv('PING_HOSTS_FILE')
+DEFAULT_PING_HOST = os.getenv('DEFAULT_PING_HOST', 'google.com')
