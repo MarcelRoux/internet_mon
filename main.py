@@ -6,7 +6,9 @@ from internet_mon.config import (DB_NAME,
                                  SPEEDTEST_UPDATES,
                                  SPEEDTEST_RETRIES,
                                  SPEEDTEST_RETRY_UPDATES,
-                                 SQL_CREATE_PING_SCRIPT)
+                                 SQL_CREATE_PING_SCRIPT,
+                                 PING_HOSTS_FILE,
+                                 DEFAULT_PING_HOST)
 from datetime import datetime, timezone
 from internet_mon.ping import ping
 
@@ -16,13 +18,22 @@ import argparse
 def ping_step():
     print('PING')
 
-    data = ping('google.com')
-    print(f'ping: {data}')
+    HOSTS = [DEFAULT_PING_HOST]
 
-    if (data):
-        insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
-    else:
-        print('No data to log.')
+    if (PING_HOSTS_FILE is not None):
+
+        with open(PING_HOSTS_FILE, 'r') as f:
+            HOSTS = [h.strip() for h in f.readlines()]
+
+    for host in HOSTS:
+
+        data = ping(host)
+        print(f'ping: {data}')
+
+        if (data):
+            insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
+        else:
+            print('No data to log.')
 
     print('=' * 32)
 
