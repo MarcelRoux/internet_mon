@@ -10,9 +10,24 @@ from internet_mon.config import (DB_NAME,
 from datetime import datetime, timezone
 from internet_mon.ping import ping
 
+import argparse
 
-def main():
 
+def ping_step():
+    print('PING')
+
+    data = ping('google.com')
+    print(f'ping: {data}')
+
+    if (data):
+        insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
+    else:
+        print('No data to log.')
+
+    print('=' * 32)
+
+
+def speedtest_step():
     print('SPEEDTEST')
 
     data = speedtest(status_updates=SPEEDTEST_UPDATES,
@@ -29,17 +44,23 @@ def main():
 
     print('-' * 32)
 
-    print('PING')
 
-    data = ping('google.com')
-    print(f'ping: {data}')
+def main():
 
-    if (data):
-        insert_data(DB_NAME, SQL_CREATE_PING_SCRIPT, data)
-    else:
-        print('No data to log.')
+    parser = argparse.ArgumentParser(description='Test the network.')
+    parser.add_argument('-p', '--ping', help='ping flag', action="store_true")
+    parser.add_argument('-st', '--speedtest', help='speedtest flag', action="store_true")
+    args = parser.parse_args()
 
-    print('=' * 32)
+    if (not any(getattr(args, arg) for arg in vars(args))):
+        print('no args - running full suite')
+        [setattr(args, arg, True) for arg in vars(args)]
+
+    if (args.ping):
+        ping_step()
+
+    if (args.speedtest):
+        speedtest_step()
 
 
 if __name__ == '__main__':
