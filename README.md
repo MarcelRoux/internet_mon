@@ -17,10 +17,13 @@ Configuration is done through the dotenv module and a .env file is required in t
 Configuration variables:
 ```
 DB_NAME=<full path to database location>
-SQL_CREATE_SCRIPT=<full path to sql create script>
+SQL_CREATE_SPEEDTEST_SCRIPT=<full path to sql create script for speedtest>
 SPEEDTEST_UPDATES=Boolean
 SPEEDTEST_RETRIES=Int
 SPEEDTEST_RETRY_UPDATES=Boolean
+SQL_CREATE_PING_SCRIPT=<full path to sql create script for ping>
+PING_HOSTS_FILE=<full path to ping hosts file>
+DEFAULT_PING_HOST=<default ping host>
 ```
 
 ## Errors
